@@ -1,0 +1,119 @@
+[
+    {
+        "name": "${name}",
+        "image": "${image}",
+        "essential": true,
+        "repositoryCredentials": {
+            "credentialsParameter": "arn:aws:secretsmanager:ap-southeast-1:652842025583:secret:core-gitlab-ee-access-SCCrcs"
+        },
+        "logConfiguration": {
+            "logDriver": "awslogs",
+            "secretOptions": null,
+            "options": {
+              "awslogs-group": "/ecs/hedwig-console-${environment}",
+              "awslogs-region": "ap-southeast-1",
+              "awslogs-create-group": "true",
+              "awslogs-stream-prefix": "ecs"
+            }
+        },
+        "portMappings": [
+            {
+              "containerPort": 3001,
+              "hostPort": 3001
+            }
+        ],
+        "environment": [
+            {
+                "name": "NODE_ENV",
+                "value": "${environment}"
+            },
+            {
+                "name": "PORT",
+                "value": "3001"
+            },
+            {
+                "name": "REDIS_CREDENTIALS",
+                "value": "redis://${redis_endpoint}:6379"
+            },
+            {
+                "name": "WHITELISTS",
+                "value": "${endpoint_whitelist}"
+            },
+            {
+                "name": "LDAP_URL",
+                "value": "ldap://${ldap_url}"
+            },
+            {
+                "name": "LDAP_BIND_DN",
+                "value": "${ldap_bind}"
+            },
+            {
+                "name": "LDAP_BIND_CREDENTIALS",
+                "value": "${ldap_bind_credentials}"
+            },
+            {
+                "name": "DATABASE",
+                "value": "${database_name}"
+            },
+            {
+                "name": "DATABASE_USERNAME",
+                "value": "${database_username}"
+            },
+            {
+                "name": "DATABASE_HOST",
+                "value": "${database_host}"
+            },
+            {
+                "name": "DATABASE_DIALECT",
+                "value": "mysql"
+            },
+            {
+                "name": "DATABASE_PORT",
+                "value": "3306"
+            },
+            {
+                "name": "VCM_URL",
+                "value": "${vcm_url}"
+            },
+            {
+                "name": "VCM_APPNAME",
+                "value": "${vcm_appname}"
+            },
+            {
+                "name": "REGION_AWS",
+                "value": "${region_aws}"
+            },
+            {
+                "name": "S3_BUCKET_NAME",
+                "value": "${s3_bucket_name}"
+            },
+            {
+                "name": "CHUNK_PER_FILE",
+                "value": "30000"
+            }
+        ],
+        "secrets":[
+            {
+                "name": "DATABASE_PASSWORD",
+                "valueFrom": "${database_password}"
+            },
+            {
+                "name": "JWT_SECRET",
+                "valueFrom": "${jwt_secret}"
+            },
+            {
+                "name": "ADMIN_PASSWORD",
+                "valueFrom": "${admin_password}"
+            },
+            {
+                "name": "VCM_CLIENT_ID",
+                "valueFrom": "${vcm_client_id}"
+            },
+            {
+                "name": "VCM_CLIENT_SECRET",
+                "valueFrom": "${vcm_client_secret}"
+            }
+        ]
+    }
+]
+

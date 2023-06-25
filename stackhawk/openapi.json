@@ -1,0 +1,299 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Hedwig Console API (Hedwig API) v0.00.04-9",
+    "description": "- Send SMS Blast",
+    "contact": {
+      "email": "rhendel.torrejos@maya.ph"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "version": "1.0.00"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3001/"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Hedwig Console API",
+      "description": "Everything about hedwig console api related requests"
+    }
+  ],
+  "paths": {
+    "/api/user/login": {
+      "post": {
+        "tags": [
+          "User Login"
+        ],
+        "description": "Login Via Ldap, use AD account",
+        "requestBody": {
+          "description": "username === ad email address or username",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginUserRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Login Via LDAP",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginUserRequest"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/sendermasks": {
+      "get": {
+        "tags": [
+          "GET Sender Masks"
+        ],
+        "description": "get sender masks",
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SenderMasksRequestGetAll"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/sendermasks/": {
+      "get": {
+        "tags": [
+          "GET Sender Masks by id"
+        ],
+        "description": "get sender masks by id",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "id",
+            "description": "this is sender masks id",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "1"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SenderMasksRequestGetById"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/senderMasks/create": {
+      "post": {
+        "tags": [
+          "Add Sender masks"
+        ],
+        "description": "Add Sender masks",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SenderMasksCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "added",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SenderMasksCreate"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/senderMasks/{id}/update": {
+      "put": {
+        "tags": [
+          "Update Sender masks"
+        ],
+        "description": "update Sender masks",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "Numeric ID of the user to get"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SenderMasksCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SenderMasksCreate"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/senderMasks/{id}": {
+      "delete": {
+        "tags": [
+          "delete Sender masks"
+        ],
+        "description": "delete Sender masks",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SenderMasksCreate"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "LoginUserRequest": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string",
+            "example": "user@paymaya.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "password"
+          }
+        }
+      },
+      "SenderMasksRequestGetAll": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "example": "1",
+              "description": "sender masks id"
+            },
+            "name": {
+              "type": "string",
+              "example": "Maya",
+              "description": "sender masks name"
+            },
+            "createdAt": {
+              "type": "string",
+              "example": "2023-02-07T10:26:11.000Z",
+              "description": "sender masks created date"
+            },
+            "updatedAt": {
+              "type": "string",
+              "example": "2023-02-07T10:26:11.000Z",
+              "description": "sender masks created date"
+            }
+          }
+        }
+      },
+      "SenderMasksRequestGetById": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "1"
+          },
+          "name": {
+            "type": "string",
+            "example": "maya"
+          },
+          "createdAt": {
+            "type": "string",
+            "example": "2023-02-07T10:26:11.000Z"
+          },
+          "updatedAt": {
+            "type": "string",
+            "example": "2023-02-07T10:26:11.000Z"
+          }
+        }
+      },
+      "SenderMasksCreate": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "maya2"
+          }
+        }
+      }
+    }
+  }
+}

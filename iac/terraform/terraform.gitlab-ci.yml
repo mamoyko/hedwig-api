@@ -1,0 +1,57 @@
+stages:
+  - validate
+  - plan
+  - apply
+
+variables:
+  TF_DIR: "$TF_DIR"
+  TF_IMAGE: 445417093929.dkr.ecr.ap-southeast-1.amazonaws.com/mt/terraform-builder:2.0
+  AWS_ROLE_SESSION_NAME: "$AWS_ROLE_SESSION_NAME"
+  AWS_REGION: ap-southeast-1
+  AWS_ROLE_ARN: "$AWS_ROLE_ARN"
+  ENV: "$ENV"
+
+.terraform_config: &terraform_config
+  image:
+    name: $TF_IMAGE
+  before_script:
+    - mkdir .aws
+    - SECRETVARS=TFVARS_${ENV}
+    - AWS_STS_CREDENTIALS=$(aws sts assume-role --role-arn ${AWS_ROLE_ARN} --role-session-name ${AWS_ROLE_SESSION_NAME} --query Credentials.[AccessKeyId,SecretAccessKey,SessionToken] --output text)
+    - export AWS_ACCESS_KEY_ID=$(echo ${AWS_STS_CREDENTIALS} | cut -d " " -f1)
+    - export AWS_SECRET_ACCESS_KEY=$(echo ${AWS_STS_CREDENTIALS} | cut -d " " -f2)
+    - export AWS_SESSION_TOKEN=$(echo ${AWS_STS_CREDENTIALS} | cut -d " " -f3)
+    - export AWS_DEFAULT_REGION=${AWS_REGION}
+    - cd $TF_DIR
+    - rm -rf .terraform
+    - echo "${!SECRETVARS}" >> secrets.tfvars
+    - terraform --version
+    - terraform init
+
+default:
+  tags:
+    - "$RUNNER_TAG"
+
+terraform:validate:
+  <<: *terraform_config
+  stage: validate
+  script:
+    - terraform validate
+
+terraform:plan:
+  <<: *terraform_config
+  stage: plan
+  script:
+    - terraform plan -var-file secrets.tfvars
+  dependencies:
+    - terraform:validate
+
+terraform:apply:
+  <<: *terraform_config
+  stage: apply
+  script:
+    - terraform apply -var-file secrets.tfvars -auto-approve
+  dependencies:
+    - terraform:plan
+  when: manual
+

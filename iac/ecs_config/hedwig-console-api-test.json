@@ -1,0 +1,118 @@
+{
+    "executionRoleArn" : "arn:aws:iam::652842025583:role/ecsTaskExecutionRole",
+    "family" : "hedwig-console-test",
+    "networkMode" : "awsvpc",
+    "cpu" : "1024",
+    "memory" : "2048",
+    "requiresCompatibilities" : ["FARGATE"],
+    "containerDefinitions" : [
+        {
+            "name": "hedwig-console-test",
+            "image": "<<IMAGE>>",
+            "essential": true,
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                  "awslogs-group": "/ecs/hedwig-console-test",
+                  "awslogs-region": "ap-southeast-1",
+                  "awslogs-create-group": "true",
+                  "awslogs-stream-prefix": "ecs"
+                }
+            },
+            "repositoryCredentials": {
+                "credentialsParameter": "arn:aws:secretsmanager:ap-southeast-1:652842025583:secret:core-gitlab-ee-access-SCCrcs"
+            },
+            "portMappings": [
+                {
+                  "containerPort": 8081,
+                  "protocol": "tcp",
+                  "hostPort": 8081
+                }
+            ],
+            "environment": [
+                {
+                    "name": "NODE_ENV",
+                    "value": "test"
+                },
+                {
+                    "name": "REDIS_CREDENTIALS",
+                    "value": "redis://hedwig-api-test.0emopj.ng.0001.apse1.cache.amazonaws.com:6379"
+                },
+                {
+                    "name": "WHITELISTS",
+                    "value": "['https://hedwig-fe-test.voyagerapis.com']"
+                },
+                {
+                    "name": "LDAP_URL",
+                    "value": "ldap://vgrawseoads1801.launchpad.corp.voyagerinnovation.com"
+                },
+                {
+                    "name": "LDAP_BIND_DN",
+                    "value": "svc.adc-hedwig"
+                },
+                {
+                    "name": "LDAP_BIND_CREDENTIALS",
+                    "value": "M@ya@2023!"
+                },
+                {
+                    "name": "DATABASE",
+                    "value": "HedwigConsole"
+                },
+                {
+                    "name": "DATABASE_USERNAME",
+                    "value": "hedwig_console"
+                },
+                {
+                    "name": "DATABASE_HOST",
+                    "value": "hedwig-test.cqtkdkbdf9yu.ap-southeast-1.rds.amazonaws.com"
+                },
+                {
+                    "name": "DATABASE_DIALECT",
+                    "value": "mysql"
+                },
+                {
+                    "name": "DATABASE_PORT",
+                    "value": "3306"
+                },
+                {
+                    "name": "VCM_URL",
+                    "value": "https://staging-vcm.voyagerinnovation.com"
+                },
+                {
+                    "name": "VCM_APPNAME",
+                    "value": "hedwig-console-test"
+                },
+                {
+                    "name": "REGION_AWS",
+                    "value": "ap-southeast-1"
+                },
+                {
+                    "name": "S3_BUCKET_NAME",
+                    "value": "hedwig-console-test"
+                }
+            ],
+            "secrets":[
+                {
+                    "name": "DATABASE_PASSWORD",
+                    "valueFrom": "arn:aws:ssm:ap-southeast-1:652842025583:parameter/Test/HedwigConsole/DB_Password"
+                },
+                {
+                    "name": "JWT_SECRET",
+                    "valueFrom": "arn:aws:ssm:ap-southeast-1:652842025583:parameter/Test/HedwigConsole/JWT_Secret"
+                },
+                {
+                    "name": "ADMIN_PASSWORD",
+                    "valueFrom": "arn:aws:ssm:ap-southeast-1:652842025583:parameter/Test/HedwigConsole/Admin_Password"
+                },
+                {
+                    "name": "VCM_CLIENT_ID",
+                    "valueFrom": "arn:aws:ssm:ap-southeast-1:652842025583:parameter/Test/HedwigConsole/vcm_client_id"
+                },
+                {
+                    "name": "VCM_CLIENT_SECRET",
+                    "valueFrom": "arn:aws:ssm:ap-southeast-1:652842025583:parameter/Test/HedwigConsole/vcm_client_secret"
+                }
+            ]
+        }
+    ]
+}

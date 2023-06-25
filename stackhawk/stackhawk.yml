@@ -1,0 +1,39 @@
+# HawkScan 3.0.0
+# Hedwig API Test Application specific config
+
+app:
+  # host: https://hedwig-console-test.voyagerapis.com
+  host: https://hedwig-console-staging.voyagerapis.com
+  # host: https://localhost:3001
+  antiCsrfParam: ""
+  applicationId: 4dd6e942-c3c1-47b7-9ef7-4caac8247f72
+  env: Development
+  autoPolicy: true
+  autoInputVectors: true
+  openApiConf:
+    filePath: /stackhawk/OpenApiConfig.json
+    inline: ""
+    strict: false
+    includeAllMethods: false
+    fakerEnabled: false
+    maxAliasesForCollections: "0"
+hawk:
+  # spider:
+  #   base: true
+  #   ajax: false
+  #   maxDurationMinutes: 5
+  #   ajaxBrowser: FIREFOX_HEADLESS
+  startupTimeoutMinutes: 1
+  scan:
+    maxDurationMinutes: "0"
+    maxRuleDurationMinutes: "0"
+    requestDelayMillis: "0"
+    concurrentRequests: "20"
+    throttlePassiveBacklog: "50"
+    policyName: ""
+hawkAddOn:
+  replacer:
+    rules:
+      - matchString: "Authorization"
+        replacement: "Basic eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijg0MDExYzdhLTdkNmMtNGU3NS04OGU2LWE0Mjc0YjgxMzZiZSIsImVtYWlsIjoidGhlb2RvcmUuc3VuZ2R1YW5AcGF5bWF5YS5jb20iLCJyb2xlIjoxLCJmaXJzdG5hbWUiOiJUaGVvZG9yZSIsImxhc3RuYW1lIjoiU3VuZ2R1YW4iLCJpYXQiOjE2ODUwMDg0NDIsImV4cCI6MjY4NTAwODQ0MX0.3yeOl4ziPWYxf8unH5FhTreEvY3p3osXgeEV4uYhIek"
+        replaceOnly: false

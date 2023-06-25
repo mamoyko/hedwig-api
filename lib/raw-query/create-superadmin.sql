@@ -1,0 +1,1 @@
+INSERT INTO Users (id,email,password,role,createdAt,updatedAt) VALUES (0,'hedwig.admin@maya.ph','929d227e-4458-4b63-86eb-f7c6078b1208',0,'2022-12-08 18:37:00', '2022-12-08 18:37:00');
